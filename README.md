@@ -1,17 +1,29 @@
-# 医美助手
+# 医美助手 · Prompt 生成器
 
 医美咨询师的"面诊方案设计"海报 prompt 生成工具。
 
-→ **[打开工具](https://matt-1004.github.io/yimei-zhushou/)**
+→ **生产环境**：https://yimei.matt.jiheniao.com/
 
-## 用法
+## 流程
 
-1. 勾改善方向 + 推荐项目
-2. 填咨询师专业判断（核心判断、避免方向）
-3. 一次性设置机构信息（自动保存）
-4. 点"生成 Prompt" + "一键复制"
-5. 粘贴到 ChatGPT + 上传客户照片 → 出海报
+1. 销售/咨询师在网页填名字 + 勾改善方向 + 推荐项目 + 写专业判断
+2. 提交 → 后端 spawn lark-cli 把 prompt 卡片消息发飞书给马特
+3. 销售扫码加马特微信 → 发客户脸图
+4. 马特用 ChatGPT (GPT-Image-2) 跑图 → 微信发回销售
+5. 销售发给客户
+
+## 架构
+
+```
+[手机/浏览器] HTTPS
+    ↓
+[腾讯云 nginx] 静态 + /api/ 反代
+    ↓ SSH 反向隧道
+[本机 Mac Node 服务]
+    ↓ spawn lark-cli
+[飞书私聊卡片 → 马特]
+```
 
 ## 状态
 
-Spike 阶段（v1），等价值验证 + 朋友 review。
+V1 spike 阶段。

@@ -2,16 +2,21 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>医美面诊方案 · Prompt 生成器</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5EDE0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="医美助手">
+<title>医美助手 · Prompt 生成器</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body {
     background: #F5EDE0;
     font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
     color: #3C2E1E;
     font-size: 14px;
+    -webkit-text-size-adjust: 100%;
   }
-  body { padding: 24px 16px 80px; }
+  body { padding: 20px 14px 100px; }
   .container { max-width: 880px; margin: 0 auto; }
 
   h1 {
@@ -49,20 +54,25 @@
   .checkbox-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 8px 16px;
+    gap: 10px 16px;
   }
   .checkbox-grid label {
-    display: flex; align-items: flex-start; gap: 8px;
-    padding: 8px 10px;
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px;
     background: #F9F4EA;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.4;
     transition: all 0.15s;
+    min-height: 44px;
+    user-select: none;
+    -webkit-user-select: none;
   }
+  .checkbox-grid label:active { background: #E5D5B8; }
   .checkbox-grid label:hover { background: #F0E5D0; }
-  .checkbox-grid label input[type=checkbox] { margin-top: 3px; cursor: pointer; flex-shrink: 0; }
+  .checkbox-grid label input[type=checkbox] { margin-top: 2px; cursor: pointer; flex-shrink: 0; width: 18px; height: 18px; accent-color: #B89968; }
+  .checkbox-grid label:has(input:checked) { background: #EAD9B8; border: 1px solid #B89968; padding: 11px 13px; }
   .checkbox-grid label .name { font-weight: 500; color: #3C2E1E; }
   .checkbox-grid label .hint { color: #8B7A66; font-size: 11px; display: block; margin-top: 2px; }
 
@@ -75,19 +85,20 @@
   .field .example { color: #B89968; font-size: 11px; font-weight: 400; margin-left: 8px; }
   textarea, input[type=text] {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: 1px solid rgba(60,46,30,0.15);
-    border-radius: 8px;
+    border-radius: 10px;
     background: #FAFAF7;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 15px;  /* 手机上 ≥16px 才能避免 iOS Safari 聚焦时自动 zoom */
     color: #3C2E1E;
     resize: vertical;
+    -webkit-appearance: none;
   }
   textarea:focus, input[type=text]:focus {
     outline: none; border-color: #B89968; background: #FFFFFF;
   }
-  textarea { min-height: 56px; }
+  textarea { min-height: 64px; font-size: 15px; }
 
   .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 
@@ -102,15 +113,20 @@
     z-index: 10;
   }
   button {
-    padding: 12px 28px;
+    padding: 14px 24px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     font-family: inherit;
     transition: all 0.15s;
+    min-height: 48px;
+    -webkit-appearance: none;
+    flex: 1;
+    max-width: 220px;
   }
+  button:active { transform: scale(0.97); }
   .btn-primary {
     background: #3C2E1E; color: #F5EDE0;
   }
@@ -126,15 +142,16 @@
   #output-section.visible { display: block; }
   #output {
     width: 100%;
-    min-height: 400px;
+    min-height: 360px;
     font-family: 'SF Mono', Menlo, Consolas, monospace;
     font-size: 12px;
     line-height: 1.6;
     background: #1E1409;
     color: #F5EDE0;
     border: none;
-    padding: 18px;
+    padding: 16px;
     border-radius: 10px;
+    -webkit-appearance: none;
   }
   .copy-tip {
     text-align: center; color: #8B7A66; font-size: 12px; margin-top: 10px;
@@ -153,17 +170,73 @@
     font-weight: 500;
   }
   .badge.review { background: #C76B3D; }
+
+  /* ============ 手机端断点（< 640px）============ */
+  @media (max-width: 640px) {
+    body { padding: 14px 10px 100px; font-size: 15px; }
+    h1 { font-size: 22px; letter-spacing: 0.5px; }
+    .subtitle { font-size: 13px; line-height: 1.6; margin-bottom: 18px; }
+    .card { padding: 18px 16px; margin-bottom: 14px; border-radius: 12px; }
+    .card h2 { font-size: 16px; }
+    .card .desc { font-size: 13px; }
+    .subgroup h3 { font-size: 14px; }
+    .checkbox-grid { grid-template-columns: 1fr; gap: 8px; }
+    .row-2 { grid-template-columns: 1fr; gap: 10px; }
+    .field .lbl { font-size: 14px; }
+    .field .example { font-size: 12px; display: block; margin-left: 0; margin-top: 3px; }
+    textarea, input[type=text] {
+      font-size: 16px;  /* 必须 16px，否则 iOS 聚焦时会自动 zoom */
+      padding: 12px 14px;
+    }
+    textarea { min-height: 72px; }
+    .actions {
+      bottom: 0;
+      margin: 16px -10px -16px;
+      padding: 14px 12px calc(14px + env(safe-area-inset-bottom));
+      gap: 10px;
+      border-top: 1px solid rgba(60,46,30,0.08);
+    }
+    button {
+      flex: 1;
+      max-width: none;
+      padding: 14px 16px;
+      font-size: 15px;
+    }
+    #output {
+      font-size: 11px;
+      padding: 12px;
+      min-height: 280px;
+    }
+    .badge { font-size: 10px; padding: 2px 6px; }
+  }
+
+  /* 超小屏（iPhone SE 等 < 380px）*/
+  @media (max-width: 380px) {
+    h1 { font-size: 20px; }
+    .card { padding: 14px 12px; }
+    .card h2 { font-size: 15px; }
+  }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <h1>医美面诊方案 · Prompt 生成器</h1>
-  <div class="subtitle">勾选 + 填空 → 点底部"生成 Prompt" → 复制粘贴到 ChatGPT + 上传客户照片</div>
+  <h1>医美助手 · 面诊方案设计</h1>
+  <div class="subtitle">勾选 + 填空 → 提交后扫码加我微信发客户图 → 3-5 分钟回方案海报</div>
+
+  <!-- 0. 您的名字（顶部必填） -->
+  <div class="card" style="border: 2px solid #B89968;">
+    <h2>① 您的名字 <span class="badge">必填</span></h2>
+    <div class="desc">让我知道是谁提交的（用于对应客户图和回方案）</div>
+    <div class="field">
+      <label class="lbl">姓名 / 工号 / 昵称</label>
+      <input type="text" id="user_name" placeholder="例：小李 / 李小蒙">
+    </div>
+  </div>
 
   <!-- 1. 改善方向 -->
   <div class="card">
-    <h2>① 改善方向 <span class="badge">多选</span></h2>
+    <h2>② 改善方向 <span class="badge">多选</span></h2>
     <div class="desc">这是大方向，决定方案表格的"方向"列。建议 2-4 个。</div>
     <div class="checkbox-grid">
       <label><input type="checkbox" name="direction" value="抗衰提升（紧致、皱纹、皮肤松弛）"><span><span class="name">抗衰提升</span><span class="hint">紧致 / 皱纹 / 皮肤松弛</span></span></label>
@@ -177,7 +250,7 @@
 
   <!-- 2. 推荐项目（细分） -->
   <div class="card">
-    <h2>② 推荐项目 <span class="badge">多选</span> <span class="badge review">朋友 review 用</span></h2>
+    <h2>③ 推荐项目 <span class="badge">多选</span></h2>
     <div class="desc">勾的项目会出现在方案推荐表格里。每类挑 1-4 个常用即可，不用全勾。</div>
 
     <div class="subgroup">
@@ -232,7 +305,7 @@
 
   <!-- 3. 咨询师专业判断 -->
   <div class="card">
-    <h2>③ 咨询师专业判断 <span class="badge">极简填空</span></h2>
+    <h2>④ 咨询师专业判断 <span class="badge">极简填空</span></h2>
     <div class="desc">用咨询师视角，告诉 AI 怎么看这位客户、要避免什么。这是最关键的一步——决定 AI 不会跑偏。</div>
     <div class="field">
       <label class="lbl">核心判断 <span class="example">例：客户馒化严重，整体偏厚重，法令纹由鼻基底凹陷+面部下垂导致，不是单纯凹陷</span></label>
@@ -250,7 +323,7 @@
 
   <!-- 4. 输出选项 -->
   <div class="card">
-    <h2>④ 输出选项 <span class="badge">控制海报内容</span></h2>
+    <h2>⑤ 输出选项 <span class="badge">控制海报内容</span></h2>
     <div class="desc">影响生成海报里有哪些区块、用什么力度。</div>
     <div class="field">
       <label class="lbl" style="display:flex;align-items:center;gap:10px;cursor:pointer">
@@ -273,7 +346,7 @@
 
   <!-- 5. 机构信息（localStorage 自动记忆） -->
   <div class="card">
-    <h2>⑤ 机构信息 <span class="badge">一次设置自动保存</span></h2>
+    <h2>⑥ 机构信息 <span class="badge">一次设置自动保存</span></h2>
     <div class="desc">下次打开会自动填入。每个机构设置一次就行。</div>
     <div class="row-2">
       <div class="field">
@@ -305,16 +378,39 @@
 
   <!-- 操作按钮 -->
   <div class="actions">
-    <button class="btn-primary" id="generate-btn">⚡ 生成 Prompt</button>
-    <button class="btn-copy" id="copy-btn" disabled>📋 一键复制</button>
+    <button class="btn-primary" id="generate-btn">📤 提交并加微信</button>
   </div>
 
-  <!-- 生成结果 -->
-  <div class="card" id="output-section">
-    <h2>⑥ 生成的 Prompt <span class="badge">复制到 ChatGPT 用</span></h2>
-    <div class="desc">把下方文字 <strong>全部复制</strong>，到 chatgpt.com 新对话窗口里粘贴 + 上传客户照片 → 发送。</div>
-    <textarea id="output" readonly></textarea>
-    <div class="copy-tip" id="copy-tip"></div>
+  <!-- CTA 卡片（提交成功后显示） -->
+  <div class="card" id="cta-section" style="display:none;border:2px solid #B89968;background:linear-gradient(180deg,#FFFFFF 0%,#FBF6EC 100%)">
+    <h2 style="color:#3C2E1E">✅ 已提交成功</h2>
+    <div class="desc" style="font-size:14px;color:#3C2E1E;margin-bottom:18px">
+      <strong>下一步</strong>：扫码加我微信 → 把客户的 2-3 张脸图发我 → 3-5 分钟内回您方案海报
+    </div>
+
+    <!-- 真实二维码 -->
+    <div style="display:flex;flex-direction:column;align-items:center;background:#FFFFFF;padding:14px;border-radius:12px;margin-bottom:14px">
+      <img src="wechat-qr-placeholder.svg" alt="加马特微信" style="width:100%;max-width:320px;height:auto;border-radius:8px;display:block">
+    </div>
+
+    <div style="background:#FBF6EC;padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.7;color:#5B4A38">
+      <strong>说明</strong>：
+      <ul style="margin-top:8px;padding-left:20px">
+        <li>加我后发您客户的 2-3 张脸图（正面 + 侧面最佳）</li>
+        <li>告诉我您的名字（系统已记录，我对得上）</li>
+        <li>等我把方案海报发回给您</li>
+      </ul>
+    </div>
+
+    <button id="reset-btn" style="margin-top:14px;width:100%;padding:12px;background:#F5EDE0;color:#8B7A66;border:1px solid rgba(60,46,30,0.15);border-radius:10px;font-size:13px;cursor:pointer;max-width:none">↺ 提交新的方案</button>
+
+    <!-- 备份：复制 prompt（万一 webhook 没配 / 手动发） -->
+    <details style="margin-top:14px">
+      <summary style="cursor:pointer;color:#8B7A66;font-size:12px">高级：手动复制方案文本（不需要）</summary>
+      <textarea id="output" readonly style="margin-top:8px"></textarea>
+      <button id="copy-btn" style="margin-top:8px;padding:8px 14px;background:#B89968;color:#FFFFFF;border:none;border-radius:8px;font-size:12px;cursor:pointer;min-height:36px;max-width:200px">复制方案文本</button>
+      <div class="copy-tip" id="copy-tip"></div>
+    </details>
   </div>
 
 </div>
@@ -336,8 +432,9 @@ document.getElementById('show_preview').addEventListener('change', (e) => {
   document.getElementById('preview-strength-wrap').style.display = e.target.checked ? 'block' : 'none';
 });
 
-// ============ 生成 prompt ============
-document.getElementById('generate-btn').addEventListener('click', () => {
+// ============ 提交（生成 prompt + POST 给马特飞书）============
+document.getElementById('generate-btn').addEventListener('click', async () => {
+  const userName = document.getElementById('user_name').value.trim();
   const directions = [...document.querySelectorAll('input[name=direction]:checked')].map(x => x.value);
   const projects = [...document.querySelectorAll('input[name=project]:checked')].map(x => x.value);
   const judgment = document.getElementById('judgment').value.trim();
@@ -346,13 +443,14 @@ document.getElementById('generate-btn').addEventListener('click', () => {
   const showPreview = document.getElementById('show_preview').checked;
   const previewStrength = document.getElementById('preview_strength').value;
 
-  const brand = document.getElementById('brand_name').value || '机构名（请在④设置）';
+  const brand = document.getElementById('brand_name').value || '机构名（请在⑥设置）';
   const slogan = document.getElementById('brand_slogan').value || '专注自然美学设计';
   const consultant = document.getElementById('consultant_name').value || '小林';
   const store = document.getElementById('store_address').value || '北京朝阳示例门店';
   const offer = document.getElementById('weekly_offer').value || '皮肤检测 + 抗衰评估免费体验';
   const cta = document.getElementById('cta_text').value || '回复 1 预约本周面诊';
 
+  if (!userName) { alert('请先填【您的名字】（顶部第①栏）'); document.getElementById('user_name').focus(); return; }
   if (directions.length === 0) { alert('请勾至少 1 个改善方向'); return; }
   if (projects.length === 0) { alert('请勾至少 1 个推荐项目'); return; }
   if (!judgment) { alert('请填核心判断（咨询师视角）'); return; }
@@ -448,11 +546,74 @@ slogan：自然 · 安全 · 精致 · 专属 · 你的美，值得精心设计
 
 请生成。`;
 
-  document.getElementById('output').value = prompt;
-  document.getElementById('output-section').classList.add('visible');
-  document.getElementById('copy-btn').disabled = false;
-  document.getElementById('output-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // 备用 textarea 也填一份 prompt（以防需要手动复制）
+  const outputEl = document.getElementById('output');
+  if (outputEl) outputEl.value = prompt;
+
+  // 准备 POST 数据
+  const payload = {
+    user_name: userName,
+    org_name: brand,
+    consultant_name: consultant,
+    directions, projects,
+    judgment, avoid, customer_note: note,
+    show_preview: showPreview,
+    preview_strength: previewStrength,
+    prompt
+  };
+
+  // 改按钮状态
+  const btn = document.getElementById('generate-btn');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ 提交中...';
+
+  try {
+    const resp = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await resp.json().catch(() => ({}));
+
+    if (!resp.ok || !result.ok) {
+      throw new Error(result.error || `提交失败 HTTP ${resp.status}`);
+    }
+
+    // 成功 → 显示 CTA 卡片
+    const ctaSection = document.getElementById('cta-section');
+    if (ctaSection) {
+      ctaSection.style.display = 'block';
+      ctaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    btn.textContent = '✅ 已提交，请加微信';
+    btn.style.background = '#5C8F4E';
+  } catch (err) {
+    alert('提交失败：' + (err.message || err) + '\n\n请截图给马特排查，或者改用手动模式：展开下方"高级"，复制方案文本直接微信发我。');
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 });
+
+// ============ 重新提交 ============
+const resetBtn = document.getElementById('reset-btn');
+if (resetBtn) {
+  resetBtn.addEventListener('click', () => {
+    if (!confirm('确定要清空当前内容、提交新方案吗？（机构信息会保留）')) return;
+    document.getElementById('user_name').value = '';
+    document.querySelectorAll('input[name=direction]:checked').forEach(x => x.checked = false);
+    document.querySelectorAll('input[name=project]:checked').forEach(x => x.checked = false);
+    document.getElementById('judgment').value = '';
+    document.getElementById('avoid').value = '';
+    document.getElementById('customer_note').value = '';
+    document.getElementById('cta-section').style.display = 'none';
+    const btn = document.getElementById('generate-btn');
+    btn.disabled = false;
+    btn.textContent = '📤 提交并加微信';
+    btn.style.background = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
 
 // ============ 一键复制 ============
 document.getElementById('copy-btn').addEventListener('click', async () => {
