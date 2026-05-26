@@ -378,39 +378,103 @@
 
   <!-- 操作按钮 -->
   <div class="actions">
-    <button class="btn-primary" id="generate-btn">📤 提交并加微信</button>
+    <button class="btn-primary" id="generate-btn">⚡ 生成方案</button>
   </div>
 
-  <!-- CTA 卡片（提交成功后显示） -->
-  <div class="card" id="cta-section" style="display:none;border:2px solid #B89968;background:linear-gradient(180deg,#FFFFFF 0%,#FBF6EC 100%)">
-    <h2 style="color:#3C2E1E">✅ 已提交成功</h2>
-    <div class="desc" style="font-size:14px;color:#3C2E1E;margin-bottom:18px">
-      <strong>下一步</strong>：扫码加我微信 → 把客户的 2-3 张脸图发我 → 3-5 分钟内回您方案海报
+  <!-- 订阅选择页（生成方案后显示） -->
+  <div class="card" id="plan-section" style="display:none;border:2px solid #B89968;background:linear-gradient(180deg,#FFFFFF 0%,#FBF6EC 100%)">
+    <h2 style="color:#3C2E1E">🎉 方案已生成！选择您的订阅</h2>
+    <div class="desc" style="font-size:13px;color:#5B4A38;margin-bottom:18px">
+      根据您的使用量选择，不确定可以先试用。下方"加微信领取"我会把您的方案海报发您。
     </div>
 
-    <!-- 真实二维码 -->
-    <div style="display:flex;flex-direction:column;align-items:center;background:#FFFFFF;padding:14px;border-radius:12px;margin-bottom:14px">
-      <img src="wechat-qr-placeholder.svg" alt="加马特微信" style="width:100%;max-width:320px;height:auto;border-radius:8px;display:block">
+    <!-- 月/年 toggle -->
+    <div id="cycle-toggle" style="display:inline-flex;background:#F0E5D0;border-radius:10px;padding:4px;margin-bottom:18px">
+      <button data-cycle="month" style="padding:8px 20px;border:none;background:transparent;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;color:#8B7A66;min-height:36px;max-width:none">按月</button>
+      <button data-cycle="year" class="active" style="padding:8px 20px;border:none;background:#B89968;color:#FFFFFF;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:36px;max-width:none">按年 <span style="font-size:11px;opacity:0.85">省 17%</span></button>
     </div>
 
-    <div style="background:#FBF6EC;padding:14px 16px;border-radius:10px;font-size:13px;line-height:1.7;color:#5B4A38">
-      <strong>说明</strong>：
-      <ul style="margin-top:8px;padding-left:20px">
-        <li>加我后发您客户的 2-3 张脸图（正面 + 侧面最佳）</li>
-        <li>告诉我您的名字（系统已记录，我对得上）</li>
-        <li>等我把方案海报发回给您</li>
-      </ul>
+    <!-- 订阅卡片网格 -->
+    <div id="plans-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:18px">
+
+      <!-- 试用 -->
+      <div class="plan-card" data-plan="free" style="background:#FFFFFF;border:2px solid rgba(60,46,30,0.1);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all 0.15s;position:relative">
+        <div style="font-size:13px;color:#8B7A66;font-weight:600;letter-spacing:1px">🆓 试用版</div>
+        <div style="margin-top:8px"><span class="price-display" style="font-size:24px;font-weight:700;color:#3C2E1E">免费</span></div>
+        <div style="font-size:11px;color:#B89968;margin-top:4px" class="price-sub">·</div>
+        <div style="font-size:12px;color:#5B4A38;line-height:1.6;margin-top:10px">
+          • 5 张图<br>
+          • 7 天有效
+        </div>
+      </div>
+
+      <!-- 标准版 -->
+      <div class="plan-card" data-plan="standard" data-month="599" data-year="5980" style="background:#FFFFFF;border:2px solid rgba(60,46,30,0.1);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all 0.15s;position:relative">
+        <div style="position:absolute;top:-9px;right:12px;background:#C76B3D;color:#FFFFFF;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;letter-spacing:0.5px">⭐ 最受欢迎</div>
+        <div style="font-size:13px;color:#8B7A66;font-weight:600;letter-spacing:1px">🥉 标准版</div>
+        <div style="margin-top:8px">
+          <span class="price-display" style="font-size:24px;font-weight:700;color:#3C2E1E">¥<span class="amount">5980</span></span>
+          <span class="cycle-label" style="font-size:13px;color:#8B7A66">/年</span>
+        </div>
+        <div style="font-size:11px;color:#B89968;margin-top:4px" class="price-sub">≈ ¥499/月</div>
+        <div style="font-size:12px;color:#5B4A38;line-height:1.6;margin-top:10px">
+          • 5 个销售席位<br>
+          • 每月 50 张图<br>
+          • 基础模板
+        </div>
+      </div>
+
+      <!-- 进阶版 -->
+      <div class="plan-card" data-plan="pro" data-month="1599" data-year="15980" style="background:#FFFFFF;border:2px solid rgba(60,46,30,0.1);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all 0.15s;position:relative">
+        <div style="font-size:13px;color:#8B7A66;font-weight:600;letter-spacing:1px">🥈 进阶版</div>
+        <div style="margin-top:8px">
+          <span class="price-display" style="font-size:24px;font-weight:700;color:#3C2E1E">¥<span class="amount">15980</span></span>
+          <span class="cycle-label" style="font-size:13px;color:#8B7A66">/年</span>
+        </div>
+        <div style="font-size:11px;color:#B89968;margin-top:4px" class="price-sub">≈ ¥1332/月</div>
+        <div style="font-size:12px;color:#5B4A38;line-height:1.6;margin-top:10px">
+          • 15 个销售席位<br>
+          • 每月 200 张图<br>
+          • 优先支持<br>
+          • 机构 logo 定制
+        </div>
+      </div>
+
+      <!-- 旗舰版 -->
+      <div class="plan-card" data-plan="enterprise" data-month="4980" data-year="49800" style="background:#FFFFFF;border:2px solid rgba(60,46,30,0.1);border-radius:12px;padding:18px 16px;cursor:pointer;transition:all 0.15s;position:relative">
+        <div style="font-size:13px;color:#8B7A66;font-weight:600;letter-spacing:1px">🥇 旗舰版</div>
+        <div style="margin-top:8px">
+          <span class="price-display" style="font-size:24px;font-weight:700;color:#3C2E1E">¥<span class="amount">49800</span></span>
+          <span class="cycle-label" style="font-size:13px;color:#8B7A66">/年</span>
+        </div>
+        <div style="font-size:11px;color:#B89968;margin-top:4px" class="price-sub">≈ ¥4150/月</div>
+        <div style="font-size:12px;color:#5B4A38;line-height:1.6;margin-top:10px">
+          • 30 个销售席位<br>
+          • 不限张数<br>
+          • 模板深度定制<br>
+          • 月度复盘服务
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 加微信领取按钮 -->
+    <button id="wx-submit-btn" style="width:100%;padding:16px;background:#3C2E1E;color:#F5EDE0;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;min-height:52px;max-width:none">📱 选择档位后 → 加微信领取方案</button>
+    <div id="plan-hint" style="text-align:center;font-size:12px;color:#8B7A66;margin-top:8px">请先在上方选择一个订阅档位</div>
+
+    <!-- 二维码区（点了加微信领取后展开） -->
+    <div id="wx-section" style="display:none;margin-top:18px;background:#FFFFFF;padding:14px;border-radius:12px">
+      <div style="text-align:center;font-size:13px;color:#3C2E1E;margin-bottom:10px">
+        ✅ 方案已发送给马特<br>
+        <span style="color:#8B7A66;font-size:12px">扫码加我微信 → 发您客户的 2-3 张脸图 → 3-5 分钟回方案海报</span>
+      </div>
+      <img src="wechat-qr-placeholder.svg" alt="加马特微信" style="width:100%;max-width:320px;height:auto;border-radius:8px;display:block;margin:0 auto">
     </div>
 
     <button id="reset-btn" style="margin-top:14px;width:100%;padding:12px;background:#F5EDE0;color:#8B7A66;border:1px solid rgba(60,46,30,0.15);border-radius:10px;font-size:13px;cursor:pointer;max-width:none">↺ 提交新的方案</button>
 
-    <!-- 备份：复制 prompt（万一 webhook 没配 / 手动发） -->
-    <details style="margin-top:14px">
-      <summary style="cursor:pointer;color:#8B7A66;font-size:12px">高级：手动复制方案文本（不需要）</summary>
-      <textarea id="output" readonly style="margin-top:8px"></textarea>
-      <button id="copy-btn" style="margin-top:8px;padding:8px 14px;background:#B89968;color:#FFFFFF;border:none;border-radius:8px;font-size:12px;cursor:pointer;min-height:36px;max-width:200px">复制方案文本</button>
-      <div class="copy-tip" id="copy-tip"></div>
-    </details>
+    <!-- 隐藏：备用 prompt 文本 -->
+    <textarea id="output" readonly style="display:none"></textarea>
   </div>
 
 </div>
@@ -546,12 +610,8 @@ slogan：自然 · 安全 · 精致 · 专属 · 你的美，值得精心设计
 
 请生成。`;
 
-  // 备用 textarea 也填一份 prompt（以防需要手动复制）
-  const outputEl = document.getElementById('output');
-  if (outputEl) outputEl.value = prompt;
-
-  // 准备 POST 数据
-  const payload = {
+  // 暂存：等用户在订阅页选档位后才真正 POST 飞书
+  window.__yimei_payload = {
     user_name: userName,
     org_name: brand,
     consultant_name: consultant,
@@ -562,11 +622,101 @@ slogan：自然 · 安全 · 精致 · 专属 · 你的美，值得精心设计
     prompt
   };
 
-  // 改按钮状态
+  // 备用 textarea 也填一份 prompt
+  const outputEl = document.getElementById('output');
+  if (outputEl) outputEl.value = prompt;
+
+  // 显示订阅选择页（不立刻 POST 飞书，等选档位 + 加微信）
+  const planSection = document.getElementById('plan-section');
+  planSection.style.display = 'block';
+  planSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
   const btn = document.getElementById('generate-btn');
-  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '✅ 方案已生成（请向下选择订阅）';
+  btn.style.background = '#5C8F4E';
+});
+
+// ============ 月/年 toggle ============
+let currentCycle = 'year';
+
+document.getElementById('cycle-toggle').addEventListener('click', (e) => {
+  if (!e.target.dataset || !e.target.dataset.cycle) return;
+  currentCycle = e.target.dataset.cycle;
+
+  // 更新 toggle 按钮样式
+  document.querySelectorAll('#cycle-toggle button').forEach(b => {
+    if (b.dataset.cycle === currentCycle) {
+      b.style.background = '#B89968'; b.style.color = '#FFFFFF';
+      b.classList.add('active');
+    } else {
+      b.style.background = 'transparent'; b.style.color = '#8B7A66';
+      b.classList.remove('active');
+    }
+  });
+
+  // 更新所有 plan 卡片价格
+  document.querySelectorAll('.plan-card').forEach(card => {
+    if (card.dataset.plan === 'free') return; // 免费档跳过
+    const amount = card.dataset[currentCycle];
+    const amountEl = card.querySelector('.amount');
+    const labelEl = card.querySelector('.cycle-label');
+    const subEl = card.querySelector('.price-sub');
+    if (amountEl) amountEl.textContent = amount;
+    if (labelEl) labelEl.textContent = currentCycle === 'year' ? '/年' : '/月';
+    if (subEl) {
+      if (currentCycle === 'year') {
+        const monthly = Math.round(parseInt(amount) / 12);
+        subEl.textContent = `≈ ¥${monthly}/月`;
+      } else {
+        const yearly = parseInt(card.dataset.year);
+        subEl.textContent = `年付省 ¥${parseInt(amount) * 12 - yearly}`;
+      }
+    }
+  });
+});
+
+// ============ 订阅卡片选中 ============
+let selectedPlan = null;
+
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => {
+      c.style.borderColor = 'rgba(60,46,30,0.1)';
+      c.style.background = '#FFFFFF';
+      c.style.transform = '';
+    });
+    card.style.borderColor = '#B89968';
+    card.style.background = '#FBF6EC';
+    card.style.transform = 'translateY(-2px)';
+    selectedPlan = card.dataset.plan;
+
+    // 更新按钮 / 提示
+    const btn = document.getElementById('wx-submit-btn');
+    const hint = document.getElementById('plan-hint');
+    btn.style.background = '#B89968';
+    btn.textContent = '📱 加微信领取方案';
+    if (hint) hint.textContent = `已选：${card.querySelector('div').textContent.trim()}`;
+  });
+});
+
+// ============ 加微信领取（最终提交飞书）============
+document.getElementById('wx-submit-btn').addEventListener('click', async () => {
+  if (!selectedPlan) {
+    alert('请先选择一个订阅档位');
+    return;
+  }
+
+  const btn = document.getElementById('wx-submit-btn');
   btn.disabled = true;
   btn.textContent = '⏳ 提交中...';
+
+  // 在 payload 里加上订阅信息
+  const payload = {
+    ...window.__yimei_payload,
+    subscription_plan: selectedPlan,
+    billing_cycle: selectedPlan === 'free' ? '-' : currentCycle
+  };
 
   try {
     const resp = await fetch('/api/submit', {
@@ -575,23 +725,19 @@ slogan：自然 · 安全 · 精致 · 专属 · 你的美，值得精心设计
       body: JSON.stringify(payload)
     });
     const result = await resp.json().catch(() => ({}));
-
     if (!resp.ok || !result.ok) {
       throw new Error(result.error || `提交失败 HTTP ${resp.status}`);
     }
 
-    // 成功 → 显示 CTA 卡片
-    const ctaSection = document.getElementById('cta-section');
-    if (ctaSection) {
-      ctaSection.style.display = 'block';
-      ctaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    btn.textContent = '✅ 已提交，请加微信';
-    btn.style.background = '#5C8F4E';
+    // 展开微信二维码区
+    document.getElementById('wx-section').style.display = 'block';
+    btn.style.display = 'none';
+    document.getElementById('plan-hint').style.display = 'none';
+    document.getElementById('wx-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (err) {
-    alert('提交失败：' + (err.message || err) + '\n\n请截图给马特排查，或者改用手动模式：展开下方"高级"，复制方案文本直接微信发我。');
+    alert('提交失败：' + (err.message || err));
     btn.disabled = false;
-    btn.textContent = originalText;
+    btn.textContent = '📱 加微信领取方案';
   }
 });
 
@@ -606,10 +752,24 @@ if (resetBtn) {
     document.getElementById('judgment').value = '';
     document.getElementById('avoid').value = '';
     document.getElementById('customer_note').value = '';
-    document.getElementById('cta-section').style.display = 'none';
+    document.getElementById('plan-section').style.display = 'none';
+    document.getElementById('wx-section').style.display = 'none';
+    document.querySelectorAll('.plan-card').forEach(c => {
+      c.style.borderColor = 'rgba(60,46,30,0.1)';
+      c.style.background = '#FFFFFF';
+      c.style.transform = '';
+    });
+    selectedPlan = null;
+    const wxBtn = document.getElementById('wx-submit-btn');
+    wxBtn.style.display = '';
+    wxBtn.disabled = false;
+    wxBtn.style.background = '#3C2E1E';
+    wxBtn.textContent = '📱 选择档位后 → 加微信领取方案';
+    document.getElementById('plan-hint').style.display = '';
+    document.getElementById('plan-hint').textContent = '请先在上方选择一个订阅档位';
     const btn = document.getElementById('generate-btn');
     btn.disabled = false;
-    btn.textContent = '📤 提交并加微信';
+    btn.textContent = '⚡ 生成方案';
     btn.style.background = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
