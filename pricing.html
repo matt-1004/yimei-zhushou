@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F5EDE0">
+<title>医美助手 · 订阅方案</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    background: #F5EDE0;
+    font-family: 'PingFang SC', 'Helvetica Neue', sans-serif;
+    color: #3C2E1E;
+    font-size: 14px;
+    -webkit-text-size-adjust: 100%;
+  }
+  body { padding: 28px 16px 80px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .serif { font-family: 'Songti SC', 'STSong', 'SimSun', 'Noto Serif CJK SC', serif; }
+
+  /* Header */
+  .header {
+    text-align: center; margin-bottom: 36px;
+  }
+  .brand-line {
+    color: #B89968; font-size: 12px; letter-spacing: 4px; margin-bottom: 8px;
+  }
+  h1 {
+    font-size: 32px; font-weight: 700; letter-spacing: 1px; color: #3C2E1E;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    color: #8B7A66; font-size: 14px; line-height: 1.7; max-width: 600px; margin: 0 auto;
+  }
+
+  /* 月/年 toggle */
+  .cycle-toggle {
+    display: inline-flex; background: #F0E5D0; border-radius: 12px; padding: 4px;
+    margin: 24px auto 32px; display: flex; width: fit-content;
+  }
+  .cycle-toggle button {
+    padding: 10px 22px; border: none; background: transparent; border-radius: 8px;
+    font-size: 14px; font-weight: 600; cursor: pointer; color: #8B7A66;
+    font-family: inherit; min-height: 40px;
+    transition: all 0.15s;
+  }
+  .cycle-toggle button.active {
+    background: #B89968; color: #FFFFFF;
+  }
+  .cycle-toggle .save-tag {
+    font-size: 11px; opacity: 0.85; margin-left: 4px;
+  }
+
+  /* 订阅卡片 */
+  .plans {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px; margin-bottom: 36px;
+  }
+  .plan {
+    background: #FFFFFF; border: 2px solid rgba(60,46,30,0.08);
+    border-radius: 16px; padding: 26px 22px;
+    position: relative;
+    transition: all 0.2s;
+    display: flex; flex-direction: column;
+  }
+  .plan.popular {
+    border-color: #B89968; box-shadow: 0 10px 30px rgba(184,153,104,0.15);
+    transform: translateY(-4px);
+  }
+  .popular-badge {
+    position: absolute; top: -12px; right: 20px;
+    background: #C76B3D; color: #FFFFFF;
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
+    letter-spacing: 0.5px;
+  }
+  .plan-icon { font-size: 24px; margin-bottom: 8px; }
+  .plan-name {
+    font-size: 17px; font-weight: 600; color: #3C2E1E; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .plan-tagline { font-size: 12px; color: #8B7A66; margin-bottom: 16px; min-height: 32px; }
+  .plan-price {
+    margin: 12px 0 8px;
+  }
+  .plan-amount {
+    font-size: 36px; font-weight: 700; color: #3C2E1E;
+  }
+  .plan-cycle {
+    font-size: 14px; color: #8B7A66; margin-left: 4px;
+  }
+  .plan-sub {
+    font-size: 12px; color: #B89968; margin-bottom: 18px; min-height: 18px;
+  }
+  .plan-features {
+    list-style: none; margin: 0 0 20px;
+    flex: 1;
+  }
+  .plan-features li {
+    font-size: 13px; color: #5B4A38; line-height: 1.9;
+    padding-left: 22px; position: relative;
+  }
+  .plan-features li::before {
+    content: '✓'; position: absolute; left: 0; color: #B89968; font-weight: 600;
+  }
+  .plan-features li.muted {
+    color: rgba(91,74,56,0.4);
+  }
+  .plan-features li.muted::before {
+    content: '·'; color: rgba(91,74,56,0.3);
+  }
+  .plan-cta {
+    width: 100%; padding: 13px; border: 1px solid #B89968;
+    background: #FFFFFF; color: #B89968;
+    border-radius: 10px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+    transition: all 0.15s; min-height: 46px;
+  }
+  .plan-cta:hover { background: #FBF6EC; }
+  .plan-cta:active { transform: scale(0.98); }
+  .plan.popular .plan-cta {
+    background: #B89968; color: #FFFFFF; border-color: #B89968;
+  }
+  .plan.popular .plan-cta:hover { background: #9A7F52; }
+
+  /* FAQ 区 */
+  .faq {
+    background: #FFFFFF; border-radius: 16px; padding: 28px 26px; margin-bottom: 24px;
+  }
+  .faq h2 {
+    font-size: 18px; font-weight: 600; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .faq h2::before {
+    content: ''; width: 6px; height: 18px; background: #B89968; border-radius: 2px;
+  }
+  .faq-item { margin-bottom: 16px; }
+  .faq-q {
+    font-size: 14px; font-weight: 600; color: #3C2E1E; margin-bottom: 6px;
+  }
+  .faq-a {
+    font-size: 13px; color: #5B4A38; line-height: 1.8;
+  }
+
+  /* CTA 联系 */
+  .contact {
+    text-align: center; background: #3C2E1E; color: #F5EDE0;
+    padding: 32px 24px; border-radius: 16px;
+  }
+  .contact h3 {
+    font-size: 20px; margin-bottom: 8px; letter-spacing: 1px;
+  }
+  .contact p {
+    font-size: 14px; opacity: 0.85; margin-bottom: 16px;
+  }
+  .contact .qr {
+    background: #FFFFFF; padding: 14px; border-radius: 12px;
+    max-width: 260px; margin: 0 auto;
+  }
+  .contact .qr img {
+    width: 100%; height: auto; border-radius: 8px; display: block;
+  }
+  .contact .hint {
+    font-size: 12px; opacity: 0.7; margin-top: 16px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center; color: #8B7A66; font-size: 12px;
+    padding: 24px 0; line-height: 1.7;
+  }
+  .footer a { color: #B89968; text-decoration: none; }
+
+  /* mobile */
+  @media (max-width: 640px) {
+    body { padding: 18px 12px 60px; }
+    h1 { font-size: 24px; }
+    .subtitle { font-size: 13px; }
+    .plan { padding: 22px 18px; }
+    .plan.popular { transform: none; }
+    .plan-amount { font-size: 30px; }
+    .faq, .contact { padding: 22px 18px; border-radius: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="brand-line">医美助手</div>
+    <h1 class="serif">订阅方案</h1>
+    <div class="subtitle">为医美机构和咨询师团队设计的 AI 面诊方案海报工具。<br>按销售用量包月 / 包年，离职可替换席位。</div>
+  </div>
+
+  <div class="cycle-toggle" id="cycle-toggle">
+    <button data-cycle="month">按月</button>
+    <button data-cycle="year" class="active">按年<span class="save-tag">省 17%</span></button>
+  </div>
+
+  <div class="plans">
+
+    <!-- 试用版 -->
+    <div class="plan" data-plan="free">
+      <div class="plan-icon">🆓</div>
+      <div class="plan-name">试用版</div>
+      <div class="plan-tagline">先体验 AI 出图效果</div>
+      <div class="plan-price">
+        <span class="plan-amount">免费</span>
+      </div>
+      <div class="plan-sub">7 天有效</div>
+      <ul class="plan-features">
+        <li>5 张图体验额度</li>
+        <li>所有改善方向</li>
+        <li>所有项目类型</li>
+        <li class="muted">机构 logo 定制</li>
+        <li class="muted">优先支持</li>
+      </ul>
+      <button class="plan-cta" data-plan="free">免费试用</button>
+    </div>
+
+    <!-- 标准版 -->
+    <div class="plan popular" data-plan="standard" data-month="599" data-year="5980">
+      <div class="popular-badge">⭐ 最受欢迎</div>
+      <div class="plan-icon">🥉</div>
+      <div class="plan-name">标准版</div>
+      <div class="plan-tagline">单店中小机构（年营收 &lt; 3000 万）</div>
+      <div class="plan-price">
+        <span style="font-size:18px;color:#8B7A66">¥</span><span class="plan-amount amount">5980</span>
+        <span class="plan-cycle cycle-label">/年</span>
+      </div>
+      <div class="plan-sub price-sub">≈ ¥499/月 · 单图 ≈ ¥10</div>
+      <ul class="plan-features">
+        <li>5 个销售席位</li>
+        <li>每月 50 张图</li>
+        <li>基础模板</li>
+        <li>飞书 / 微信通知</li>
+        <li class="muted">机构 logo 定制</li>
+        <li class="muted">月度复盘</li>
+      </ul>
+      <button class="plan-cta" data-plan="standard">订阅标准版</button>
+    </div>
+
+    <!-- 进阶版 -->
+    <div class="plan" data-plan="pro" data-month="1599" data-year="15980">
+      <div class="plan-icon">🥈</div>
+      <div class="plan-name">进阶版</div>
+      <div class="plan-tagline">单店中型机构（3000 万 - 1 亿）</div>
+      <div class="plan-price">
+        <span style="font-size:18px;color:#8B7A66">¥</span><span class="plan-amount amount">15980</span>
+        <span class="plan-cycle cycle-label">/年</span>
+      </div>
+      <div class="plan-sub price-sub">≈ ¥1332/月 · 单图 ≈ ¥8</div>
+      <ul class="plan-features">
+        <li>15 个销售席位</li>
+        <li>每月 200 张图</li>
+        <li>所有标准版功能</li>
+        <li>优先支持（飞书/微信群）</li>
+        <li>机构 logo 定制</li>
+        <li class="muted">月度复盘</li>
+      </ul>
+      <button class="plan-cta" data-plan="pro">订阅进阶版</button>
+    </div>
+
+    <!-- 旗舰版 -->
+    <div class="plan" data-plan="enterprise" data-month="4980" data-year="49800">
+      <div class="plan-icon">🥇</div>
+      <div class="plan-name">旗舰版</div>
+      <div class="plan-tagline">连锁 / 集团（年营收 &gt; 1 亿）</div>
+      <div class="plan-price">
+        <span style="font-size:18px;color:#8B7A66">¥</span><span class="plan-amount amount">49800</span>
+        <span class="plan-cycle cycle-label">/年</span>
+      </div>
+      <div class="plan-sub price-sub">≈ ¥4150/月 · 单图 &lt; ¥5</div>
+      <ul class="plan-features">
+        <li>30 个销售席位</li>
+        <li>每月不限张数</li>
+        <li>所有进阶版功能</li>
+        <li>模板深度定制</li>
+        <li>月度复盘服务</li>
+        <li>专属客户经理</li>
+      </ul>
+      <button class="plan-cta" data-plan="enterprise">订阅旗舰版</button>
+    </div>
+
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>常见问题</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">Q：销售可以自己付费吗？</div>
+      <div class="faq-a">A：可以，但建议机构层面统一订阅——AI 工具的 ROI 体现在转化提升，机构受益最大；销售跳槽时账号也可由机构在席位池里替换。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q：席位可以替换吗？</div>
+      <div class="faq-a">A：可以。每个订阅档位提供 N 个席位名额，机构后台可以自由绑定/解绑销售工号——人员流动不影响订阅。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q：超出包月张数怎么算？</div>
+      <div class="faq-a">A：标准 ¥15/张、进阶 ¥10/张、旗舰 ¥6/张。月底统一结算，不会自动从额度扣。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q：包不包发票？</div>
+      <div class="faq-a">A：标准/进阶/旗舰均提供增值税普通发票；旗舰版支持专票。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q：客户人脸数据怎么处理？</div>
+      <div class="faq-a">A：客户照片仅用于本次方案生成，提交即视为客户授权；马特端处理完即删除（保留期不超过 24 小时）。机构可申请数据本地化部署（仅旗舰版）。</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q：alpha 阶段有什么差异？</div>
+      <div class="faq-a">A：当前为 alpha 内测，免费体验阶段。正式订阅启用前 3 个月按以上价格 8 折，并附赠 1 次免费机构 logo / 模板定制服务。</div>
+    </div>
+  </div>
+
+  <!-- 联系 -->
+  <div class="contact">
+    <h3>想试用 / 想详细了解？</h3>
+    <p>扫码加我微信，告诉我您的机构名称和大概规模，我给您详细的方案 + 试用账号</p>
+    <div class="qr">
+      <img src="wechat-qr-placeholder.svg" alt="加马特微信">
+    </div>
+    <div class="hint">马特 · 北京朝阳 · 平日 9-22 点</div>
+  </div>
+
+  <div class="footer">
+    医美助手 V1 · Alpha 阶段（2026-05）<br>
+    本页面为定价说明，实际订阅 / 开票 / 合同请联系上方微信沟通<br>
+    销售工具入口：<a href="/">https://yimei.matt.jiheniao.com/</a>
+  </div>
+
+</div>
+
+<script>
+let currentCycle = 'year';
+
+document.getElementById('cycle-toggle').addEventListener('click', (e) => {
+  if (!e.target.dataset || !e.target.dataset.cycle) return;
+  currentCycle = e.target.dataset.cycle;
+
+  document.querySelectorAll('#cycle-toggle button').forEach(b => {
+    b.classList.toggle('active', b.dataset.cycle === currentCycle);
+  });
+
+  document.querySelectorAll('.plan').forEach(plan => {
+    if (plan.dataset.plan === 'free') return;
+    const amount = plan.dataset[currentCycle];
+    if (!amount) return;
+    const amtEl = plan.querySelector('.amount');
+    const labelEl = plan.querySelector('.cycle-label');
+    const subEl = plan.querySelector('.price-sub');
+    if (amtEl) amtEl.textContent = amount;
+    if (labelEl) labelEl.textContent = currentCycle === 'year' ? '/年' : '/月';
+    if (subEl) {
+      const yearly = parseInt(plan.dataset.year);
+      const monthly = parseInt(plan.dataset.month);
+      const unitImg = plan.dataset.plan === 'standard' ? 10 :
+                       plan.dataset.plan === 'pro' ? 8 : 5;
+      if (currentCycle === 'year') {
+        subEl.textContent = `≈ ¥${Math.round(yearly / 12)}/月 · 单图 ≈ ¥${unitImg}`;
+      } else {
+        subEl.textContent = `单图 ≈ ¥${unitImg} · 年付省 ¥${monthly * 12 - yearly}`;
+      }
+    }
+  });
+});
+
+document.querySelectorAll('.plan-cta').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelector('.contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
