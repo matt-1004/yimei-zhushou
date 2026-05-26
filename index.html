@@ -383,6 +383,7 @@
 
   <!-- 订阅选择页（生成方案后显示） -->
   <div class="card" id="plan-section" style="display:none;border:2px solid #B89968;background:linear-gradient(180deg,#FFFFFF 0%,#FBF6EC 100%)">
+    <button id="back-btn" style="background:transparent;color:#8B7A66;border:none;padding:6px 0;font-size:13px;cursor:pointer;margin-bottom:8px;max-width:none;text-align:left;display:inline-flex;align-items:center;gap:4px;min-height:auto">← 返回修改</button>
     <h2 style="color:#3C2E1E">🎉 方案已生成！选择您的订阅</h2>
     <div class="desc" style="font-size:13px;color:#5B4A38;margin-bottom:18px">
       根据您的使用量选择，不确定可以先试用。下方"加微信领取"我会把您的方案海报发您。
@@ -672,15 +673,37 @@ slogan：自然 · 安全 · 精致 · 专属 · 你的美，值得精心设计
   const outputEl = document.getElementById('output');
   if (outputEl) outputEl.value = prompt;
 
-  // 显示订阅选择页（不立刻 POST 飞书，等选档位 + 加微信）
-  const planSection = document.getElementById('plan-section');
-  planSection.style.display = 'block';
-  planSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // 跳到订阅选择页（隐藏填表区，只显示订阅页）
+  showStep('plan');
+});
 
+// ============ 页面切换 ============
+function showStep(step) {
+  const isPlan = step === 'plan';
+  // 隐藏 / 显示填表区所有元素
+  document.querySelectorAll('.container > .card').forEach(c => {
+    if (c.id === 'plan-section') c.style.display = isPlan ? 'block' : 'none';
+    else c.style.display = isPlan ? 'none' : '';
+  });
+  // 标题 / 副标题 / 操作按钮也跟着切
+  const h1 = document.querySelector('h1');
+  const subtitle = document.querySelector('.subtitle');
+  const actions = document.querySelector('.actions');
+  if (h1) h1.style.display = isPlan ? 'none' : '';
+  if (subtitle) subtitle.style.display = isPlan ? 'none' : '';
+  if (actions) actions.style.display = isPlan ? 'none' : 'flex';
+  // 滚回顶
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+// 返回修改：从订阅页回填表页
+document.getElementById('back-btn').addEventListener('click', () => {
+  showStep('form');
+  // 复原生成按钮状态
   const btn = document.getElementById('generate-btn');
-  btn.disabled = true;
-  btn.textContent = '✅ 方案已生成（请向下选择订阅）';
-  btn.style.background = '#5C8F4E';
+  btn.disabled = false;
+  btn.textContent = '⚡ 生成方案';
+  btn.style.background = '';
 });
 
 // ============ 月/年 toggle ============
@@ -798,7 +821,7 @@ if (resetBtn) {
     document.getElementById('judgment').value = '';
     document.getElementById('avoid').value = '';
     document.getElementById('customer_note').value = '';
-    document.getElementById('plan-section').style.display = 'none';
+    // 复原所有订阅页状态
     document.getElementById('wx-section').style.display = 'none';
     document.querySelectorAll('.plan-card').forEach(c => {
       c.style.borderColor = 'rgba(60,46,30,0.1)';
@@ -813,11 +836,13 @@ if (resetBtn) {
     wxBtn.textContent = '📱 选择档位后 → 加微信领取方案';
     document.getElementById('plan-hint').style.display = '';
     document.getElementById('plan-hint').textContent = '请先在上方选择一个订阅档位';
+    // 复原生成按钮
     const btn = document.getElementById('generate-btn');
     btn.disabled = false;
     btn.textContent = '⚡ 生成方案';
     btn.style.background = '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 切回填表页
+    showStep('form');
   });
 }
 
