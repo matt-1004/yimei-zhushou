@@ -491,6 +491,52 @@ orgFields.forEach(id => {
   el.addEventListener('input', () => localStorage.setItem('mymei_' + id, el.value));
 });
 
+// ============ 必填校验：滚到该字段 + 卡片高亮 + Toast 提示 ============
+function showToast(msg) {
+  let toast = document.getElementById('yimei-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'yimei-toast';
+    toast.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(28,22,16,0.94);color:#FFFFFF;padding:12px 22px;border-radius:24px;font-size:14px;z-index:9999;opacity:0;transition:opacity 0.25s, transform 0.25s;max-width:88%;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.15);pointer-events:none;font-weight:500';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  toast.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(8px)'; }, 2400);
+}
+
+function validateAndScroll(checkFn, targetSelector, hintMsg) {
+  if (checkFn()) return true;
+
+  const target = document.querySelector(targetSelector);
+  if (!target) return false;
+
+  const card = target.closest('.card') || target;
+  // 滚到目标卡片中部
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  // 卡片高亮闪烁（黄色边框 + 浅黄背景）
+  const origBoxShadow = card.style.boxShadow;
+  const origBorderColor = card.style.borderColor;
+  card.style.transition = 'box-shadow 0.3s, border-color 0.3s';
+  card.style.boxShadow = '0 0 0 3px #FFB627, 0 8px 24px rgba(255,182,39,0.25)';
+  setTimeout(() => {
+    card.style.boxShadow = origBoxShadow || '';
+  }, 2000);
+
+  // toast 提示
+  showToast('⚠ ' + hintMsg);
+
+  // 输入框 focus（延迟到滚动结束）
+  if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+    setTimeout(() => target.focus({ preventScroll: true }), 500);
+  }
+
+  return false;
+}
+
 // ============ 效果预览开关：控制改善幅度显隐 ============
 document.getElementById('show_preview').addEventListener('change', (e) => {
   document.getElementById('preview-strength-wrap').style.display = e.target.checked ? 'block' : 'none';
@@ -514,10 +560,10 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
   const offer = document.getElementById('weekly_offer').value || '皮肤检测 + 抗衰评估免费体验';
   const cta = document.getElementById('cta_text').value || '回复 1 预约本周面诊';
 
-  if (!userName) { alert('请先填【您的名字】（顶部第①栏）'); document.getElementById('user_name').focus(); return; }
-  if (directions.length === 0) { alert('请勾至少 1 个改善方向'); return; }
-  if (projects.length === 0) { alert('请勾至少 1 个推荐项目'); return; }
-  if (!judgment) { alert('请填核心判断（咨询师视角）'); return; }
+  if (!validateAndScroll(() => userName, '#user_name', '请先填写您的名字（第 ① 栏）')) return;
+  if (!validateAndScroll(() => directions.length > 0, 'input[name=direction]', '请勾至少 1 个改善方向（第 ② 栏）')) return;
+  if (!validateAndScroll(() => projects.length > 0, 'input[name=project]', '请勾至少 1 个推荐项目（第 ③ 栏）')) return;
+  if (!validateAndScroll(() => judgment, '#judgment', '请填咨询师核心判断（第 ④ 栏）')) return;
 
   const prompt = `我会上传一张客户照片，请基于这位客户的真实照片 + 咨询师的专业判断，生成一张 magazine 风格的"面诊方案设计"海报。
 
